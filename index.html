@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poarta Horoscopului</title>
+  <meta name="description" content="Pagină cu o singură întrebare, în stil horoscopic, cu buton în limba română." />
+  <style>
+    :root{
+      --bg1:#0b0720; /* deep space */
+      --bg2:#2a0e5e; /* nebula violet */
+      --accent:#f7d36a; /* golden zodiac */
+      --accent-2:#a78bfa; /* soft purple */
+      --text:#f8f7ff;
+      --glass: rgba(255,255,255,.06);
+      --glass-stroke: rgba(255,255,255,.15);
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    /* Reset */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Inter", "SF Pro Text", sans-serif;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(86,51,147,.35), transparent 60%),
+                  radial-gradient(900px 600px at 80% 80%, rgba(247,211,106,.15), transparent 60%),
+                  linear-gradient(140deg, var(--bg1), var(--bg2) 70%);
+      overflow:hidden;
+    }
+
+    /* Stars */
+    .stars, .stars:before, .stars:after{
+      position: absolute; inset:0; content:""; display:block;
+      background-repeat: repeat; background-size: 200px 200px; pointer-events:none;
+      animation: twinkle 8s linear infinite;
+      filter: drop-shadow(0 0 2px rgba(255,255,255,.6));
+    }
+    .stars{background-image: radial-gradient(1px 1px at 20px 30px, #fff 50%, transparent 52%),
+                                radial-gradient(1.2px 1.2px at 80px 120px, #fff 50%, transparent 52%),
+                                radial-gradient(0.8px 0.8px at 150px 60px, #fff 50%, transparent 52%),
+                                radial-gradient(1px 1px at 190px 160px, #fff 50%, transparent 52%);
+    }
+    .stars:before{opacity:.7; background-image: radial-gradient(1px 1px at 60px 90px, #fff 50%, transparent 52%),
+                                                 radial-gradient(0.8px 0.8px at 120px 30px, #fff 50%, transparent 52%),
+                                                 radial-gradient(1.1px 1.1px at 170px 110px, #fff 50%, transparent 52%);
+                  animation-duration: 10s;}
+    .stars:after{opacity:.5; background-image: radial-gradient(1px 1px at 30px 150px, #fff 50%, transparent 52%),
+                                                radial-gradient(0.8px 0.8px at 140px 70px, #fff 50%, transparent 52%),
+                                                radial-gradient(1.2px 1.2px at 190px 20px, #fff 50%, transparent 52%);
+                 animation-duration: 12s;}
+    @keyframes twinkle{0%{transform:translateY(0)} 50%{opacity:.8} 100%{transform:translateY(-10px)}}
+
+    /* Layout */
+    .wrap{position:relative; min-height:100%; display:grid; place-items:center; padding:24px}
+
+    /* Card */
+    .card{
+      position:relative; width:min(640px, 92vw); padding:48px 36px; border-radius:28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border:1px solid var(--glass-stroke); box-shadow: var(--shadow);
+      backdrop-filter: blur(8px) saturate(1.2);
+      text-align:center;
+    }
+
+    /* Zodiac ring (decor) */
+    .zodiac{
+      position:absolute; inset:-80px; pointer-events:none; opacity:.18; filter: blur(.2px);
+    }
+
+    h1{margin:0 0 18px; font-weight:800; letter-spacing:.3px; font-size: clamp(28px, 5vw, 40px)}
+    .subtitle{opacity:.85; font-size: clamp(14px, 2.4vw, 16px); margin-bottom:26px}
+
+    /* Button */
+    .btn{
+      --ring: rgba(247,211,106,.35);
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:14px 28px; border-radius:999px; font-weight:700; font-size:18px; letter-spacing:.3px;
+      color:#1b113a; background: linear-gradient(180deg, #ffeaa7, #f7d36a);
+      border:0; cursor:pointer; box-shadow: 0 10px 22px rgba(247,211,106,.25), inset 0 1px 0 rgba(255,255,255,.6);
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn:hover{transform: translateY(-1px); box-shadow: 0 14px 26px rgba(247,211,106,.33), inset 0 1px 0 rgba(255,255,255,.8)}
+    .btn:active{transform: translateY(0); filter: saturate(1.1)}
+    .btn:focus-visible{outline: none; box-shadow: 0 0 0 6px var(--ring)}
+
+    /* Tiny footer note (optional) */
+    .note{margin-top:16px; font-size:12px; opacity:.65}
+
+    /* Motion */
+    @keyframes slow-rotate{from{transform:rotate(0)} to{transform:rotate(360deg)}}
+    .spin{animation: slow-rotate 60s linear infinite}
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <main class="wrap" role="main">
+    <section class="card" aria-labelledby="q">
+      <!-- Decorative zodiac ring -->
+      <svg class="zodiac spin" viewBox="0 0 600 600" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop offset="0%" stop-color="var(--accent)"/>
+            <stop offset="100%" stop-color="var(--accent-2)"/>
+          </linearGradient>
+        </defs>
+        <circle cx="300" cy="300" r="250" fill="none" stroke="url(#g)" stroke-width="1.2"/>
+        <g fill="url(#g)" font-size="28" font-family="Georgia, serif" text-anchor="middle">
+          <!-- Simple zodiac glyphs as text (♈︎♉︎...) around the ring -->
+          <text x="300" y="40">♈︎</text>
+          <text x="515" y="120">♉︎</text>
+          <text x="580" y="320">♊︎</text>
+          <text x="515" y="520">♋︎</text>
+          <text x="300" y="596">♌︎</text>
+          <text x="85" y="520">♍︎</text>
+          <text x="20" y="320">♎︎</text>
+          <text x="85" y="120">♏︎</text>
+          <text x="300" y="40" transform="rotate(20 300 300)">♐︎</text>
+          <text x="515" y="120" transform="rotate(40 300 300)">♑︎</text>
+          <text x="580" y="320" transform="rotate(60 300 300)">♒︎</text>
+          <text x="515" y="520" transform="rotate(80 300 300)">♓︎</text>
+        </g>
+      </svg>
+
+      <h1 id="q">Aveți 18 ani?</h1>
+      <p class="subtitle">(Portalul previziunilor se deschide doar pentru persoane majore)</p>
+
+      <button class="btn" id="yes" aria-label="Confirmați că aveți 18 ani sau mai mult">Da</button>
+      <div class="note" id="msg" aria-live="polite" role="status"></div>
+    </section>
+  </main>
+
+  <script>
+    // Click action (no redirect requested). Feel free to replace with your own logic.
+    const btn = document.getElementById('yes');
+    const msg = document.getElementById('msg');
+    btn.addEventListener('click', () => {
+      msg.textContent = 'Mulțumesc!';
+      // Example: window.location.href = '/horoscope';
+    });
+  </script>
+</body>
+</html>
